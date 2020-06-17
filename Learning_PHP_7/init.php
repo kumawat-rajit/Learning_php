@@ -18,15 +18,23 @@ require_once($filename);
 }
 
 spl_autoload_register('autoloader');
-$book1 = new Book(9785267006323,"1984", "George Orwell",  12);
-$book2 = new Book(9780061120084, "To Kill a Mockingbird", "Harper Lee", 2);
-
-
-//print_r( [$book1]);
-$customer1 = new Basic(5, 'John', 'Doe', 'johndoe@mail.com');
-var_dump(checkIfValid($customer1, [$book1]));
-
-function checkIfValid(Customer $customer, array $books): bool {
-return $customer->getAmountToBorrow() >= count($books);
+function createBasicCustomer(int $id)
+{
+try {
+echo "\nTrying to create a new customer with id $id.\n";
+return new Basic($id, "name", "surname", "email");
+} catch (InvalidIdException $e) {
+echo "You cannot provide a negative id.\n";
+} catch (ExceededMaxAllowedException $e) {
+echo "No more customers are allowed.\n";
+} catch (Exception $e) {
+echo "Unknown exception: " . $e->getMessage();
 }
+}
+createBasicCustomer(1);
+createBasicCustomer(-1);
+createBasicCustomer(55);
+//function checkIfValid(Customer $customer, array $books): bool {
+//return $customer->getAmountToBorrow() >= count($books);
+
 ?>
