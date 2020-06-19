@@ -31,9 +31,10 @@ echo "No more customers are allowed.\n";
 echo "Unknown exception: " . $e->getMessage();
 }
 }
-createBasicCustomer(1);
-createBasicCustomer(-1);
-createBasicCustomer(55);
+CustomerFactory::factory('basic', 2, 'mary', 'poppins', 'mary@poppins.
+com');
+CustomerFactory::factory('premium', null, 'james', 'bond', 'james@
+bond.com');
 //function checkIfValid(Customer $customer, array $books): bool {
 //return $customer->getAmountToBorrow() >= count($books);
 
