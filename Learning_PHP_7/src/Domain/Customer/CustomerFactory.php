@@ -18,6 +18,6 @@ string $email
 	return new $classname($id, $firstname, $surname, $email);
 }
 }
-}
+
 
 ?>

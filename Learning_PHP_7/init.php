@@ -4,7 +4,8 @@ use Bookstore\Domain\Book;
 use Bookstore\Domain\Customer;
 use Bookstore\Domain\Customer\Basic;
 use Bookstore\Domain\Customer\Premium;
-
+use Bookstore\Domain\Customer\CustomerFactory;
+use Bookstore\Utils\Config;
 function autoloader($classname) {	
 $lastSlash = strpos($classname, '\\') + 1;
 
@@ -33,8 +34,27 @@ echo "Unknown exception: " . $e->getMessage();
 }
 CustomerFactory::factory('basic', 2, 'mary', 'poppins', 'mary@poppins.
 com');
-CustomerFactory::factory('premium', null, 'james', 'bond', 'james@
+CustomerFactory::factory('premium', 3, 'james', 'bond', 'james@
 bond.com');
+
+
+$dbConfig = Config::getInstance()->get('db');
+$db = new PDO('mysql:host=127.0.0.1;dbname=bookstore',$dbConfig['user'],$dbConfig['password']);
+$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+$query = <<<SQL
+INSERT INTO book (isbn, title, author, price)
+VALUES (:isbn, :title, :author, :price)
+SQL;
+$statement = $db->prepare($query);
+$params = [
+'isbn' => '9781412108614',
+'title' => 'Iliad',
+'author' => 'Homer',
+'price' => 9.25
+];
+$statement->execute($params);
+echo $db->lastInsertId();
 //function checkIfValid(Customer $customer, array $books): bool {
 //return $customer->getAmountToBorrow() >= count($books);
 
